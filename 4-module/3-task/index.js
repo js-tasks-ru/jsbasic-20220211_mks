@@ -11,10 +11,11 @@ function highlight(table) {
 
     for (let cell of cells) {
       if (statusCell) {
+
         // Классы available, unavailable, hidden
-        if (cell.dataset.available == 'true') {
+        if (cell.dataset.available === 'true') {
           row.classList.add('available');
-        } else if (cell.dataset.available == 'false') {
+        } else if (cell.dataset.available === 'false') {
           row.classList.add('unavailable');
         }
       } else {
@@ -22,9 +23,9 @@ function highlight(table) {
       }
 
       // Классы male/female
-      if (genderCell == 'm') {
+      if (genderCell === 'm') {
         row.classList.add('male');
-      } else if (genderCell == 'f'){
+      } else if (genderCell === 'f'){
         row.classList.add('female');
       }
 
