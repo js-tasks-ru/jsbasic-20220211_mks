@@ -1,7 +1,8 @@
 import createElement from '../../assets/lib/create-element.js';
 
 export default class Carousel {
-  slides = [];
+  slides = null;
+  elem = null;
 
   constructor(slides) {
     this.slides = slides;
@@ -9,24 +10,20 @@ export default class Carousel {
   }
 
   render() {
- 
-    const slider = this.template();
-    const img = slider.querySelector('.carousel__img');
-    let slideWidth = 0;  
-
-    img.onload = function() {
-      slideWidth = img.width;
-    }
-
-    let sliderCalc = 0;
+    const slider = this.template(); 
+    let sliderCalc = 0;   
     
     slider.querySelector('.carousel__arrow_left').style.display = 'none';
     
     slider.querySelector('.carousel__arrow_right').addEventListener('click', () => {
-
+      const img = slider.querySelector('.carousel__img');
+      let slideWidth = img.offsetWidth;
+      
       slider.querySelector('.carousel__arrow_left').style.display = 'flex';
     
       sliderCalc = sliderCalc - slideWidth;
+
+      console.log(sliderCalc);
     
       slider.querySelector('.carousel__inner').style.transform = `translateX(${sliderCalc}px)`;
     
@@ -37,9 +34,16 @@ export default class Carousel {
     });
     
     slider.querySelector('.carousel__arrow_left').addEventListener('click', () => {
+      const img = slider.querySelector('.carousel__img');
+      let slideWidth = img.offsetWidth;
+  
+
       slider.querySelector('.carousel__arrow_right').style.display = 'flex';
     
       sliderCalc = sliderCalc + slideWidth;
+
+      console.log(sliderCalc);
+
       slider.querySelector('.carousel__inner').style.transform = `translateX(${sliderCalc}px)`;
     
       if (sliderCalc == 0) {
@@ -85,7 +89,7 @@ export default class Carousel {
         });
         
         this.elem.dispatchEvent(event);
-      });
+      },);
 
       carouselInner.append(oneSlide);
     }
@@ -109,8 +113,7 @@ export default class Carousel {
   `);
   }
 
-  template() {   
-
+  template() {
     const container = this.container();
     const oneslide = this.oneslide();
     const navright = this.slidernavsright();
