@@ -9,13 +9,15 @@ export default class Modal {
     this.elem.querySelector('.modal__title').innerText = modalTitle;
   }
 
-  setBody(modalBodyText) {
+  setBody(modalBody) {
+    const modalBodyText = modalBody;
+    console.log(modalBodyText);
     this.elem.querySelector('.modal__body').innerHTML = '';
-    this.elem.querySelector('.modal__body').innerText = modalBodyText.innerText;
+    this.elem.querySelector('.modal__body').append(modalBodyText);
   }
 
   open() {
-    document.querySelector('.container').append(this.elem);
+    document.body.append(this.elem);
     document.body.classList.add('is-modal-open');
 
     this.elem.querySelector('.modal__close').addEventListener('click', () => {
@@ -25,14 +27,15 @@ export default class Modal {
 
     const onKey = (event) => {
       if (event.code === 'Escape') {
+        document.body.classList.remove('is-modal-open');
         this.elem.remove();
       }
     }
 
     document.body.addEventListener('keydown', onKey);
+
     document.body.addEventListener('keyup', (event) => {
       if (event.code === 'Escape') {
-        document.body.classList.remove('is-modal-open');
         document.body.removeEventListener('keydown', onKey);
       }
     });
@@ -44,7 +47,6 @@ export default class Modal {
         <div class="modal__overlay"></div>
         <div class="modal__inner">
           <div class="modal__header">
-            <!--Кнопка закрытия модального окна-->
             <button type="button" class="modal__close">
               <img src="/assets/images/icons/cross-icon.svg" alt="close-icon">
             </button>
