@@ -22,13 +22,13 @@ export default class Modal {
 
     this.elem.querySelector('.modal__close').addEventListener('click', () => {
       document.body.classList.remove('is-modal-open');
-      this.elem.remove();
+      this.close();
     });
 
     const onKey = (event) => {
       if (event.code === 'Escape') {
         document.body.classList.remove('is-modal-open');
-        this.elem.remove();
+        this.close();
       }
     }
 
