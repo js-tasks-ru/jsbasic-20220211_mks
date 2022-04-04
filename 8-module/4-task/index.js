@@ -12,7 +12,11 @@ export default class Cart {
     this.addEventListeners();
 
     this.cartItems = [];
-    this.products = [];    
+    this.products = [];
+
+    this.modal = new Modal();
+
+    console.log(this.modal.elem);
   }
 
   addProduct(product) {
@@ -29,14 +33,13 @@ export default class Cart {
     this.products.push(product);
 
     if (this.cartItems.length > 0) {
-      if (this.cartItems.some(item => JSON.stringify(product) == JSON.stringify(item.product))) {
+      if (this.cartItems.some(item => product.id == item.product.id)) {
         for (let item in this.cartItems) {
-          if (JSON.stringify(product) == JSON.stringify(this.cartItems[item].product)) {
+          if (product.id == this.cartItems[item].product.id) {
             this.cartItems[item].count = this.cartItems[item].count + 1;
           }
         }
-      }
-      else {
+      } else {
         this.cartItems.push(tempProduct);
       }
     }
@@ -48,26 +51,21 @@ export default class Cart {
     for (let cartItem of this.cartItems) {
       this.onProductUpdate(cartItem);
     }
- 
   }
 
   updateProductCount(productId, amount) {
 
     console.log(this.cartItems);
 
-    this.cartItems = this.cartItems.map(updateCountsCartItems);
+    this.cartItems = this.cartItems.map((item) => {
 
-    function updateCountsCartItems(tempItem) {
-
-      if (tempItem.product.id == productId) {
-        tempItem.count = tempItem.count + amount;
+      if (item.product.id == productId) {
+        item.count = item.count + amount;
       }
 
-      console.log(tempItem);
+      return item;
+    });
 
-      return tempItem;
-    }
-    
     console.log(this.cartItems);
 
     for (let item in this.cartItems) {
@@ -89,8 +87,7 @@ export default class Cart {
     console.log(this.isEmpty());
 
     if (this.isEmpty()) {
-      document.body.classList.remove('is-modal-open');
-      document.querySelector('.modal').remove();
+      this.modal.close();
     }
     
   }
@@ -177,9 +174,8 @@ export default class Cart {
   }
 
   renderModal() {
-    const modal = new Modal();
     const modalBody = document.createElement('div');
-    modal.setTitle('Your order');
+    this.modal.setTitle('Your order');
     
     console.log(this.cartItems);
     console.log(this.products);
@@ -208,9 +204,10 @@ export default class Cart {
     }
 
     modalBody.append(this.renderOrderForm());
-    modal.setBody(modalBody);
 
-    modal.open();
+    this.modal.setBody(modalBody);
+
+    this.modal.open();
 
     this.onSubmit();
 
@@ -221,28 +218,27 @@ export default class Cart {
     this.cartIcon.update(this);
 
     if (document.body.classList == 'is-modal-open') {
-      let modalBody = document.querySelector('.modal');
       let generalPrice = 0;
 
       for (let item in cartItem) {
         let productId = cartItem[item].product.id;
 
         // Элемент, который хранит количество товаров с таким productId в корзине
-        let productCount = modalBody.querySelector(`[data-product-id="${productId}"] .cart-counter__count`);
+        let productCount = this.modal.elem.querySelector(`[data-product-id="${productId}"] .cart-counter__count`);
   
         // Элемент с общей стоимостью всех единиц этого товара
-        let productPrice = modalBody.querySelector(`[data-product-id="${productId}"] .cart-product__price`);
+        let productPrice = this.modal.elem.querySelector(`[data-product-id="${productId}"] .cart-product__price`);
         productPrice.innerHTML = `€${(cartItem[item].product.price * cartItem[item].count).toFixed(2)}`;
 
         // Элемент с суммарной стоимостью всех товаров
-        let infoPrice = modalBody.querySelector(`.cart-buttons__info-price`);
+        let infoPrice = this.modal.elem.querySelector(`.cart-buttons__info-price`);
         generalPrice = generalPrice + (cartItem[item].product.price * cartItem[item].count);
         infoPrice.innerHTML = `€${generalPrice.toFixed(2)}`;
       
         productCount.innerHTML = cartItem[item].count;
 
       if (cartItem[item].count ==  0) {
-        let product = modalBody.querySelector(`[data-product-id="${productId}"]`);
+        let product = this.modal.elem.querySelector(`[data-product-id="${productId}"]`);
         product.remove();
         console.log(cartItem)
       }
@@ -270,10 +266,7 @@ export default class Cart {
 
         responsePromise
           .then((response) => {
-            document.querySelector('.modal__title').innerHTML = 'Success!';
-            this.cartItems.splice(0, this.cartItems.length);
-            this.onProductUpdate(this.cartItems);
-            document.querySelector('.modal__body').innerHTML = `
+            const successBody = createElement(`
               <div class="modal__body-inner">
                 <p>
                   Order successful! Your order is being cooked :) <br>
@@ -281,7 +274,11 @@ export default class Cart {
                   <img src="/assets/images/delivery.gif">
                 </p>
               </div>
-            `
+            `);
+            this.modal.setTitle('Success!');
+            this.cartItems.splice(0, this.cartItems.length);
+            this.onProductUpdate(this.cartItems);
+            this.modal.setBody(successBody);
           })
           .catch(() => {
             console.log('error');

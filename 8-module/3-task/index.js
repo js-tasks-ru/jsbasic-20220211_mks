@@ -22,14 +22,13 @@ export default class Cart {
     this.products.push(product);
 
     if (this.cartItems.length > 0) {
-      if (this.cartItems.some(item => JSON.stringify(product) == JSON.stringify(item.product))) {
+      if (this.cartItems.some(item => product.id == item.product.id)) {
         for (let item in this.cartItems) {
-          if (JSON.stringify(product) == JSON.stringify(this.cartItems[item].product)) {
+          if (product.id == this.cartItems[item].product.id) {
             this.cartItems[item].count = this.cartItems[item].count + 1;
           }
         }
-      }
-      else {
+      } else {
         this.cartItems.push(tempProduct);
       }
     }
@@ -48,19 +47,15 @@ export default class Cart {
 
     console.log(this.cartItems);
 
-    this.cartItems = this.cartItems.map(updateCountsCartItems);
+    this.cartItems = this.cartItems.map((item) => {
 
-    function updateCountsCartItems(tempItem) {
-
-      if (tempItem.product.id == productId) {
-        tempItem.count = tempItem.count + amount;
+      if (item.product.id == productId) {
+        item.count = item.count + amount;
       }
 
-      console.log(tempItem);
+      return item;
+    });
 
-      return tempItem;
-    }
-    
     console.log(this.cartItems);
 
     for (let item in this.cartItems) {
@@ -70,7 +65,6 @@ export default class Cart {
     }
 
     console.log(this.cartItems);
-
   }
 
   isEmpty() {

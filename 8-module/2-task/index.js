@@ -67,8 +67,8 @@ export default class ProductGrid {
       inner.append(card.elem);
     }
 
-    document.querySelector('.products-grid').innerHTML = '';
-    document.querySelector('.products-grid').append(inner);
+    this.elem.innerHTML = '';
+    this.elem.append(inner);
   }
 
 }
