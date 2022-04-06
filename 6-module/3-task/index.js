@@ -18,12 +18,10 @@ export default class Carousel {
     slider.querySelector('.carousel__arrow_right').addEventListener('click', () => {
       const img = slider.querySelector('.carousel__img');
       let slideWidth = img.offsetWidth;
-      
+
       slider.querySelector('.carousel__arrow_left').style.display = 'flex';
     
       sliderCalc = sliderCalc - slideWidth;
-
-      console.log(sliderCalc);
     
       slider.querySelector('.carousel__inner').style.transform = `translateX(${sliderCalc}px)`;
     
@@ -41,8 +39,6 @@ export default class Carousel {
       slider.querySelector('.carousel__arrow_right').style.display = 'flex';
     
       sliderCalc = sliderCalc + slideWidth;
-
-      console.log(sliderCalc);
 
       slider.querySelector('.carousel__inner').style.transform = `translateX(${sliderCalc}px)`;
     
@@ -89,7 +85,7 @@ export default class Carousel {
         });
         
         this.elem.dispatchEvent(event);
-      },);
+      });
 
       carouselInner.append(oneSlide);
     }

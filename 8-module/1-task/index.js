@@ -18,7 +18,7 @@ export default class CartIcon {
       this.elem.innerHTML = `
         <div class="cart-icon__inner">
           <span class="cart-icon__count">${cart.getTotalCount()}</span>
-          <span class="cart-icon__price">€${cart.getTotalPrice().toFixed(2)}</span>
+          <span class="cart-icon__price">€${Number(cart.getTotalPrice()).toFixed(2)}</span>
         </div>`;
 
       this.updatePosition();
@@ -39,6 +39,40 @@ export default class CartIcon {
   }
 
   updatePosition() {
-    // ваш код ...
+    
+    if (this.elem.offsetWidth > 0) {
+      const elemCoords = this.elem.getBoundingClientRect();
+      const container = document.querySelector('.container');
+      let leftIndent = Math.min(
+        container.getBoundingClientRect().right + 20,
+        document.documentElement.clientWidth - this.elem.offsetWidth - 10
+      );
+
+      let initialTopCoord = this.elem.getBoundingClientRect().top + window.pageYOffset;
+
+      if (elemCoords.top < initialTopCoord ) {
+        this.elem.style.position = 'fixed';
+        this.elem.style.top = '50px';
+        this.elem.style.zIndex = '1000';
+        this.elem.style.right = '10px';
+        this.elem.style.left = `${leftIndent}px`;
+      }
+
+      if (elemCoords.top == initialTopCoord) {
+        this.elem.style.position = '';
+        this.elem.style.top = '';
+        this.elem.style.zIndex = '';
+        this.elem.style.right = '';
+        this.elem.style.left = '';
+      }
+
+      if (document.documentElement.clientWidth <= 767) {
+        this.elem.style.position = '';
+        this.elem.style.top = '';
+        this.elem.style.zIndex = '';
+        this.elem.style.left = '';
+      }
+        
+    }
   }
 }
