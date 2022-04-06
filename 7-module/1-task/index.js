@@ -65,6 +65,8 @@ export default class RibbonMenu {
         let target = e.target;
         if (target.tagName != 'A') return;
 
+        e.preventDefault();
+
         const siblings = Array.prototype.slice.call(target.parentNode.children);
         const event = new CustomEvent('ribbon-select', {
           detail: idItemMenu,

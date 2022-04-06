@@ -5,7 +5,7 @@ export default class StepSlider {
   value = null;
   elem = null;
 
-  constructor({ steps, value = 0 }) {
+  constructor({ steps, value = 0}) {
     this.steps = steps;
     this.value = value;
     this.elem = this.render();
@@ -16,9 +16,10 @@ export default class StepSlider {
     const thumb = result.querySelector('.slider__thumb');
     const slider = document.querySelector('.slider');
     const progress = result.querySelector('.slider__progress');
-    progress.style.width = '0%';
-    result.querySelector('.slider__value').innerText = 0;
-    result.querySelector(`.slider__steps span:nth-child(1)`).classList.add('slider__step-active');
+    thumb.style.left = `${100/(this.steps - 1) * this.value}%`;
+    progress.style.width = `${100/(this.steps - 1) * this.value}%`;
+    result.querySelector('.slider__value').innerText = this.value;
+    result.querySelector(`.slider__steps span:nth-child(${this.value + 1})`).classList.add('slider__step-active');
 
     console.log(result.getBoundingClientRect());
     thumb.ondragstart = () => {
