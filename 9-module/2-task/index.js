@@ -38,7 +38,7 @@ export default class Main {
     stepSlider.append(this.stepSlider.elem);
     cartIcon.append(this.cartIcon.elem);
 
-    const responsePromise = fetch('http://127.0.0.1:5500/9-module/2-task/products.json');
+    const responsePromise = fetch('products.json');
     
     await responsePromise
       .then((response) => {
