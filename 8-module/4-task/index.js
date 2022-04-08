@@ -7,6 +7,9 @@ export default class Cart {
   cartItems = []; // [product: {...}, count: N]
 
   constructor(cartIcon) {
+
+    console.log(cartIcon)
+
     this.cartIcon = cartIcon;
 
     this.addEventListeners();
@@ -142,7 +145,7 @@ export default class Cart {
               <img src="/assets/images/icons/square-plus-icon.svg" alt="plus">
             </button>
           </div>
-          <div class="cart-product__price">€${product.price.toFixed(2)}</div>
+          <div class="cart-product__price">€${(product.price * count).toFixed(2)}</div>
         </div>
       </div>
     </div>`);
